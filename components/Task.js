@@ -1,24 +1,48 @@
 import React, {useState} from "react";
 import { View,Text,StyleSheet, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Edittask from "./Edittask";
 
 
-const Task = (props) =>{
+const Task = ({index,task,modifyTask,deleteTask}) =>{
     const [completed, setCompleted] = useState(false);
+    const [isEditing, setisEditing] = useState(false);
 
     return (
         <View style={styles.items}>
-            <View style={styles.square}></View>
-    
-            <Text style={[styles.text, completed && styles.completedtext]}>{props.task}</Text>
-
+            {
+                isEditing ? 
+                (<Edittask    
+                    task = {task}
+                    onSave = {(newTask) => {
+                        modifyTask(index, newTask)
+                        setisEditing(false)
+                    }}
+                />):(<>
+            
             <TouchableOpacity 
                 onPress={()=>setCompleted(!completed)} 
-                style={[styles.circle, completed && styles.taskCompleted]}>
+                style={[styles.circle, completed && styles.taskCompleted && styles.button]}>
 
-                    {completed ? (<Icon name="check" size={20} color="white"  style={styles.iconStyle}/>) : null}
+                    {completed ? (<Icon name="check" size={15} color="black"  style={styles.iconStyle}/>) : null}
             </TouchableOpacity>
-            {/* <View style={styles.circle}></View> */}
+    
+            <Text style={[styles.text, completed && styles.completedtext]}>{task}</Text>
+            
+            
+            <View style={styles.button}>
+            
+
+            <TouchableOpacity onPress={()=>deleteTask(index)} style={styles.deleteButton}>
+                <Icon name="delete" size={20} color="black"  style={styles.iconStyle}/>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={()=>setisEditing(true)} style={styles.editButton}>
+                <Icon name="edit" size={20} color="black"  style={styles.iconStyle}/>
+            </TouchableOpacity>
+            </View>
+            </>
+            )};
         </View>
     )
 }
@@ -28,6 +52,7 @@ const styles = StyleSheet.create({
         fontSize:16,  
         // flexWrap:'wrap',
         marginRight:15,
+        marginLeft:10,
         flexShrink: 1,
 
     },
@@ -54,26 +79,36 @@ const styles = StyleSheet.create({
         margin:10
     },
     circle:{
-        height:30,
-        width:30,
+        height:20,
+        width:20,
         backgroundColor:'transparent',
         borderColor:'green',
         borderRadius:15,
         borderWidth:2,
-        marginLeft:'auto',
         justifyContent:'center',
         alignItems:'center',
+        position:'absolute'
+
     },
     taskCompleted:{
-        backgroundColor:'green',
+        backgroundColor:'red',
 
     },
     completedtext:{
         textDecorationLine:'line-through',
         color:'lightgray'
     },
-    iconStyle:{
-        // fontWeight:
+    button:{
+        marginLeft:'auto',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        color:'grey'
+    },
+    editButton:{
+        marginLeft:10,
+    },
+    deleteButton:{
+        marginLeft:'auto',
     }
     
 

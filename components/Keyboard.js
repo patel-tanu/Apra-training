@@ -22,12 +22,9 @@ const Keyboard = ({addTask}) =>{
                             value={task} 
                             onChangeText={(text) => {setTask(text)}}>               
                         </TextInput>
-                        {/* <TouchableOpacity style={styles.buttonContainer} onPress={handleAddTask}> */}
-                            {/* <View style={styles.button}>
-                                <Text style={styles.buttonText}>+</Text>
-                            </View> */}
-                            <Icon name="add" size={20} color="black"  style={styles.iconStyle} onPress={handleAddTask}/>
-                        {/* </TouchableOpacity> */}
+                       
+                        <Icon name="add" size={20} color="black"  style={styles.iconStyle} onPress={handleAddTask}/>
+                      
                         
                     </View>
                 
