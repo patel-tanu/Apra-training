@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import {View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 
-const Edittask = ({task, onSave, onCancel}) =>{
+const Edittask = ({task, onSave}) =>{
     const [newTask, setNewTask] = useState(task);
 
     const handleSave = () =>{
