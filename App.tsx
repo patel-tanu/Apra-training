@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import Task from './components/Task';
 import Keyboard from './components/Keyboard';
 import { database } from './model/database';
+import styles from './styles';
+import TaskModel from './model/Task';
+
+interface TaskType {
+  id: string;
+  task: string;
+  isCompleted: boolean;
+}
 
 const App = () => {
-  const [taskArray, setTaskArray] = useState([]);
+  const [taskArray, setTaskArray] = useState<TaskType[]>([]);
 
   useEffect(() => {
     fetchTasks();
@@ -13,9 +21,9 @@ const App = () => {
 
   const fetchTasks = async () => {
     try {
-      const tasksCollection = await database.collections.get('task_table').query().fetch();
+      const tasksCollection = await database.collections.get<TaskModel>('task_table').query().fetch();
 
-      setTaskArray(tasksCollection.map(task => ({
+      setTaskArray(tasksCollection.map((task) => ({
         id: task.id,
         task: task.task,
         isCompleted: task.isCompleted,
@@ -25,11 +33,11 @@ const App = () => {
     }
   };
 
-  const addTask = async (task) => {
+  const addTask = async (task: string) => {
     if (task.trim()) {
       try {
         const newTask = await database.write(async () => {
-          return await database.collections.get('task_table').create(newTask => {
+          return await database.collections.get<TaskModel>('task_table').create((newTask: TaskModel) => {
             newTask.task = task;
             newTask.isCompleted = false;
           });
@@ -46,9 +54,9 @@ const App = () => {
     }
   };
 
-  const deleteTask = async (taskId) => {
+  const deleteTask = async (taskId: string) => {
     try {
-      const taskRecord = await database.collections.get('task_table').find(taskId);
+      const taskRecord = await database.collections.get<TaskModel>('task_table').find(taskId);
       await database.write(async () => {
         await taskRecord.destroyPermanently();
       });
@@ -59,12 +67,11 @@ const App = () => {
     }
   };
 
-  const modifyTask = async (taskId, newTask) => {
-    
+  const modifyTask = async (taskId: string, newTask: TaskType) => {
     try {
       await database.write(async () => {
-        const taskRecord = await database.collections.get('task_table').find(taskId);
-        await taskRecord.update(task => {
+        const taskRecord = await database.collections.get<TaskModel>('task_table').find(taskId);
+        await taskRecord.update((task: TaskModel) => {
           task.task = newTask.task;
           task.isCompleted = newTask.isCompleted;
         });
@@ -81,7 +88,7 @@ const App = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.mainContainer}>
       <Text style={styles.title}> Let's Do This! </Text>
       <ScrollView>
         {taskArray.map((item) => (
@@ -97,16 +104,5 @@ const App = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: { backgroundColor: 'gray', flex: 1 },
-  title: {
-    padding: 20,
-    backgroundColor: '#deb887',
-    textAlign: 'center',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-});
 
 export default App;

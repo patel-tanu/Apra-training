@@ -6,10 +6,10 @@ export const mySchema = appSchema({
         tableSchema({
             name: 'task_table',
             columns:[
-                // {name: "uuid", type: 'string', isPrimaryKey: true },
+                
                 {name: 'task', type:'string'},
                 {name: 'is_completed', type:'boolean'},
-                {name: 'date', type: 'number'}
+               
             ]
         })
     ]

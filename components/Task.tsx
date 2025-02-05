@@ -1,16 +1,28 @@
+
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Edittask from "./Edittask";
+import styles from '../styles';
 
-const Task = ({ task, modifyTask, deleteTask }) => {
+interface TaskProps {
+  task: {
+    id: string;
+    task: string;
+    isCompleted: boolean;
+  };
+  modifyTask: (newTask: { id: string; task: string; isCompleted: boolean }) => void;
+  deleteTask: () => void;
+}
+
+const Task: React.FC<TaskProps> = ({ task, modifyTask, deleteTask }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const toggleCompleted = async () => {
+  const toggleCompleted = () => {
     modifyTask({ ...task, isCompleted: !task.isCompleted });
   };
 
-  const handleSave = (newTask) => {
+  const handleSave = (newTask: string) => {
     modifyTask({ ...task, task: newTask });
     setIsEditing(false);
   };
@@ -23,7 +35,7 @@ const Task = ({ task, modifyTask, deleteTask }) => {
         <>
           <TouchableOpacity 
             onPress={toggleCompleted} 
-            style={[styles.circle, task.isCompleted && styles.taskCompleted ]}
+            style={[styles.circle, task.isCompleted && styles.taskCompleted]}
           >
             {task.isCompleted ? (<Icon name="check" size={15} color="black" />) : null}
           </TouchableOpacity>
@@ -46,14 +58,5 @@ const Task = ({ task, modifyTask, deleteTask }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  text_task: { fontSize: 16, marginRight: 15, marginLeft: 15, flexShrink: 1 },
-  items: { backgroundColor: "white", margin: 10, flexDirection: 'row', padding: 10, alignItems: 'center', borderRadius: 10 },
-  circle: { height: 20, width: 20, borderColor: 'green', borderRadius: 15, borderWidth: 2, justifyContent: 'center', alignItems: 'center' },
-  taskCompleted: { backgroundColor: 'red' },
-  completedtext: { textDecorationLine: 'line-through', color: 'lightgray' },
-  button: { marginLeft: 'auto', flexDirection: 'row' },
-});
 
 export default Task;

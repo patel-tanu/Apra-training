@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import { View,Text, Alert, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Alert, TextInput, TouchableOpacity } from "react-native";
+import styles from "../styles";
 
-const Edittask = ({ task, onSave }) => {
-  const [newTask, setNewTask] = useState(task.task);
+interface EditTaskProps {
+  task: { task: string };
+// onSave: (newTask: string) => void;
+  onSave(newTask:string) : void;
+}
+
+const EditTask: React.FC<EditTaskProps> = ({ task, onSave }) => {
+  const [newTask, setNewTask] = useState<string>(task.task);
 
   const handleSave = () => {
     if (newTask.trim()) {
@@ -26,10 +33,7 @@ const Edittask = ({ task, onSave }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: { flexDirection: 'row', alignItems: 'center' },
-  input: { borderColor: 'black', borderWidth: 1, flex: 1, padding: 5 },
-  save: { backgroundColor: '#d2691e', padding: 5, borderRadius: 5, marginLeft: 5 },
-});
+export default EditTask;
 
-export default Edittask;
+
+
