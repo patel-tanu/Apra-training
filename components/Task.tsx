@@ -4,14 +4,11 @@ import { View, Text, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Edittask from "./Edittask";
 import styles from '../styles';
+import { TaskType } from "../helpers/types";
 
 interface TaskProps {
-  task: {
-    id: string;
-    task: string;
-    isCompleted: boolean;
-  };
-  modifyTask: (newTask: { id: string; task: string; isCompleted: boolean }) => void;
+  task: TaskType;
+  modifyTask: (id:string, newTask: TaskType) => void;
   deleteTask: () => void;
 }
 
@@ -19,11 +16,11 @@ const Task: React.FC<TaskProps> = ({ task, modifyTask, deleteTask }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleCompleted = () => {
-    modifyTask({ ...task, isCompleted: !task.isCompleted });
+    modifyTask(task.id,{ ...task, isCompleted: !task.isCompleted });
   };
 
   const handleSave = (newTask: string) => {
-    modifyTask({ ...task, task: newTask });
+    modifyTask(task.id,{ ...task, task: newTask });
     setIsEditing(false);
   };
 
